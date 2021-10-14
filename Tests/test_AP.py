@@ -1,6 +1,10 @@
 import pytest
 from AP import AP, PropertyStatement
 
+namespace_fname = "Tests/TestData/namespaces.csv"
+metadata_fname = "Tests/TestData/about.csv"
+shapeInfo_fname = "Tests/TestData/shapes.csv"
+
 
 @pytest.fixture(scope="module")
 def test_AP():
@@ -37,8 +41,7 @@ def test_add_namespace(test_AP):
 
 def test_load_namespaces(test_AP):
     ap = test_AP
-    ns_file = "Tests/TestData/namespaces.csv"
-    ap.load_namespaces(ns_file)
+    ap.load_namespaces(namespace_fname)
     assert ap.namespaces["foaf"] == "http://xmlns.com/foaf/0.1/"
 
 
@@ -51,6 +54,13 @@ def test_add_metadata(test_AP):
     with pytest.raises(TypeError) as e:
         ap.add_namespace("dct:title", 22)
     assert str(e.value) == "Both ns and URI must be strings."
+
+
+def test_load_metadata(test_AP):
+    ap = test_AP
+    ap.load_metadata(metadata_fname)
+    assert ap.metadata["url"] == "tap.csv"
+    assert ap.metadata["date"] == "2021-03-26"
 
 
 def test_add_shapeInfo(test_AP):
@@ -70,3 +80,14 @@ def test_add_shapeInfo(test_AP):
     with pytest.raises(TypeError) as e:
         ap.add_shapeInfo("sh1", "just the label")
     assert str(e.value) == "Shape info must be a dictionary."
+
+
+def test_load_shapeInfo(test_AP):
+    ap = test_AP
+    ap.load_shapeInfo(shapeInfo_fname)
+    assert (
+        ap.shapeInfo["#CredentialOrganization"]["label"]
+        == "Credential Organization Shape"
+    )
+    assert ap.shapeInfo["#Address"]["target"] == "ceterms:address"
+    assert ap.shapeInfo["#Address"]["targetType"] == "ObjectsOf"

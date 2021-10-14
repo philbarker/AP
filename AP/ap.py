@@ -132,7 +132,7 @@ class AP:
 
     def load_namespaces(self, fname):
         """Load namespaces from a (csv) file."""
-        # could add options for loading from other formats
+        # TODO could add options for loading from other formats
         with open(fname, "r") as csv_file:
             csvReader = DictReader(csv_file)
             for row in csvReader:
@@ -140,6 +140,32 @@ class AP:
                     self.add_namespace(row["prefix"], row["URI"])
                 else:  # pass rows with missing data
                     pass
+
+    def load_metadata(self, fname):
+        """Load metadata from a (headingless csv) file."""
+        # TODO could add options for loading from other formats
+        # TODO option to have header row or not
+        with open(fname, "r") as csv_file:
+            csvReader = DictReader(csv_file, fieldnames=["key", "value"])
+            for row in csvReader:
+                self.add_metadata(row["key"], row["value"])
+
+    def load_shapeInfo(self, fname):
+        """Load shapeInfo from a (csv) file."""
+        # TODO could add options for loading from other formats
+        # TODO check shapeID column exists
+        with open(fname, "r") as csv_file:
+            csvReader = DictReader(csv_file)
+            for row in csvReader:
+                if row["shapeID"]:
+                    sh_id = row["shapeID"]
+                    sh_info = {}
+                else:
+                    continue
+                for key in row.keys():
+                    sh_info[key] = row[key]
+                del sh_info["shapeID"]
+                self.add_shapeInfo(sh_id, sh_info)
 
     def dump(self):
         """Print all the AP data."""
