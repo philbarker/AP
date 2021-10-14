@@ -15,6 +15,9 @@ class AP:
 
     def add_namespace(self, ns, uri):
         """Adds (over-writes) the ns: URI, key value pair to the namespaces dict."""
+        # FIXME ":" should be part of prefix s.t. can have : as pref
+        # This will affect prefix expansion which assumes it isn't
+        # Should check for cases with no colon and add it
         if (type(ns) == str) and (type(uri) == str):
             self.namespaces[ns] = uri
         else:
