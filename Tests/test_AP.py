@@ -43,6 +43,7 @@ def test_load_namespaces(test_AP):
     ap = test_AP
     ap.load_namespaces(namespace_fname)
     assert ap.namespaces["foaf"] == "http://xmlns.com/foaf/0.1/"
+    assert ap.namespaces["base"] == "http://example.org/"
 
 
 def test_add_metadata(test_AP):
