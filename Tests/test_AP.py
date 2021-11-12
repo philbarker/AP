@@ -32,6 +32,12 @@ def test_add_namespace(test_AP):
     ap.add_namespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     assert ap.namespaces["dct"] == "http://purl.org/dc/terms/"
     assert ap.namespaces["rdf"] == "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    ap.add_namespace("", "http://example.org/")
+    assert ap.namespaces["default"] == "http://example.org/"
+    ap.add_namespace(":", "http://example.org/colon#")
+    assert ap.namespaces["default"] == "http://example.org/colon#"
+    ap.add_namespace("ex:", "http://example.org/colon#")
+    assert ap.namespaces["ex"] == "http://example.org/colon#"
     with pytest.raises(TypeError):
         ap.add_namespace(27, "http://purl.org/dc/terms/")
     with pytest.raises(TypeError) as e:

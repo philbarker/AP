@@ -16,7 +16,13 @@ class AP:
     def add_namespace(self, ns, uri):
         """Adds (over-writes) the ns: URI, key value pair to the namespaces dict."""
         if (type(ns) == str) and (type(uri) == str):
-            self.namespaces[ns] = uri
+            if (len(ns) == 0) or  ns == ":":
+                prefix = "default"
+            elif (ns[-1]) == ":":
+                prefix = ns[:-1]
+            else:
+                prefix = ns
+            self.namespaces[prefix] = uri
         else:
             msg = "Both ns and URI must be strings."
             raise TypeError(msg)
