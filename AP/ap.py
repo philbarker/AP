@@ -37,13 +37,30 @@ class AP:
             raise TypeError(msg)
         return
 
-    def add_shapeInfo(self, sh, value):
+    def add_shapeInfo(self, sh, info):
         """Adds (over-writes) the shape info to the shape dict."""
-        if (type(sh) == str) and (type(value) == dict):
-            self.shapeInfo[sh] = value
-        elif type(value) != dict:
+        if type(sh) != str:
+            msg = "Shape key must be a string."
+            raise TypeError(msg)
+        elif type(info) != dict:
             msg = "Shape info must be a dictionary."
             raise TypeError(msg)
+        else:
+        # need to normalise some values to booleans
+        # ad hoc solution for now
+        # when reqs for shape info are settled will probaly have
+        # a data class for shapeInfo and methods to read values
+        # that will include normalization
+            t_vals = ["true", "t", "yes", "1"]
+            f_vals = ["false", "f", "no", "0"]
+            booleans = ["closed", "mandatory"]
+            for b in booleans:
+                if b in info.keys():
+                    if str(info[b]).lower() in t_vals:
+                        info[b] = True
+                    elif str(info[b]).lower() in f_vals:
+                        info[b] = False
+            self.shapeInfo[sh] = info
         return
 
     def add_propertyStatement(self, ps):

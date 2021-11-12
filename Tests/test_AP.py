@@ -78,12 +78,14 @@ def test_add_shapeInfo(test_AP):
         "comment": "just a shape for tests",
         "target": "Person",
         "targetType": "class",
+        "closed": True,
         "mandatory": False,
         "severity": "Warning",
         "properties": ["p1", "p2"],
     }
     ap.add_shapeInfo("sh1", shapeInfo)
     assert ap.shapeInfo["sh1"]["label"] == "test shape"
+    assert ap.shapeInfo["sh1"]["closed"] == True
     with pytest.raises(TypeError) as e:
         ap.add_shapeInfo("sh1", "just the label")
     assert str(e.value) == "Shape info must be a dictionary."
@@ -98,3 +100,4 @@ def test_load_shapeInfo(test_AP):
     )
     assert ap.shapeInfo["#Address"]["target"] == "ceterms:address"
     assert ap.shapeInfo["#Address"]["targetType"] == "ObjectsOf"
+    assert ap.shapeInfo["#AgentSectorTypeAlignment"]["closed"] == True
