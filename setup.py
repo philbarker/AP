@@ -2,11 +2,12 @@
 
 from distutils.core import setup
 
-setup(name='AP',
-      version='0.2.0',
-      description='Application profile data classes',
-      author='Phil Barker',
-      author_email='phil@pjjk.net',
-      url='https://github.com/philbarker/AP',
-      packages=['AP'],
-     )
+setup(
+    name="AP",
+    version="0.2.1",
+    description="Application profile data classes",
+    author="Phil Barker",
+    author_email="phil@pjjk.net",
+    url="https://github.com/philbarker/AP",
+    packages=["AP"],
+)
