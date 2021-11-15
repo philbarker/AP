@@ -97,7 +97,7 @@ class PropertyStatement:
             else:
                 self.valueShapes.append(shapeID)
         else:
-            msg = "Value data type must be a string."
+            msg = "Shape must be a string."
             raise TypeError(msg)
 
     def add_valueConstraint(self, constraint):
