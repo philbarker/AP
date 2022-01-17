@@ -65,7 +65,7 @@ class AP:
         splitters = ", |; |,|;| \n| |\n" # ideally read from config
         lists = ["ignoreProps"]
         for l in lists:
-            if l in info.keys():
+            if l in info.keys() and info[l]:
                 valueStr = info[l]
                 value_list = re.split(splitters, valueStr)
                 info[l] = value_list
