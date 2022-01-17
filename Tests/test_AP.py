@@ -81,7 +81,7 @@ def test_add_shapeInfo(test_AP):
         "closed": True,
         "mandatory": False,
         "severity": "Warning",
-        "properties": ["p1", "p2"],
+        "ignoreProps": "p1; p2",
     }
     ap.add_shapeInfo("sh1", shapeInfo)
     assert ap.shapeInfo["sh1"]["label"] == "test shape"
@@ -89,7 +89,7 @@ def test_add_shapeInfo(test_AP):
     with pytest.raises(TypeError) as e:
         ap.add_shapeInfo("sh1", "just the label")
     assert str(e.value) == "Shape info must be a dictionary."
-
+    assert ap.shapeInfo["sh1"]["ignoreProps"] == ["p1", "p2"]
 
 def test_load_shapeInfo(test_AP):
     ap = test_AP

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field, asdict
 from .propertyStatement import PropertyStatement
 from csv import DictReader
-import pprint
+import pprint, re
 
 
 @dataclass
@@ -48,7 +48,7 @@ class AP:
         else:
         # need to normalise some values to booleans
         # ad hoc solution for now
-        # when reqs for shape info are settled will probaly have
+        # when reqs for shape info are settled will probably have
         # a data class for shapeInfo and methods to read values
         # that will include normalization
             t_vals = ["true", "t", "yes", "1"]
@@ -60,7 +60,17 @@ class AP:
                         info[b] = True
                     elif str(info[b]).lower() in f_vals:
                         info[b] = False
-            self.shapeInfo[sh] = info
+        # need to normalise some values to lists
+        # ad hoc solution for now, as above
+        splitters = ", |; |,|;| \n| |\n" # ideally read from config
+        lists = ["ignoreProps"]
+        for l in lists:
+            if l in info.keys():
+                valueStr = info[l]
+                value_list = re.split(splitters, valueStr)
+                info[l] = value_list
+        # don't forget to save the shape
+        self.shapeInfo[sh] = info
         return
 
     def add_propertyStatement(self, ps):
