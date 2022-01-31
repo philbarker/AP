@@ -91,6 +91,8 @@ class AP:
             for row in csvReader:
                 if row["prefix"] and row["URI"]:
                     self.add_namespace(row["prefix"], row["URI"])
+                elif row["URI"]:
+                    self.add_namespace("", row["URI"])
                 else:  # pass rows with missing data
                     pass
 
