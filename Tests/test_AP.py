@@ -29,7 +29,7 @@ def test_init_defaults(test_AP):
 def test_add_namespace(test_AP):
     ap = test_AP
     ap.add_namespace("dct", "http://purl.org/dc/terms/")
-    ap.add_namespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+    ap.add_namespace("rdf:", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     assert ap.namespaces["dct"] == "http://purl.org/dc/terms/"
     assert ap.namespaces["rdf"] == "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     ap.add_namespace("", "http://example.org/")
