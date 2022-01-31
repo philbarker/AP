@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name="AP",
-    version="0.2.4",
+    version="0.3.0",
     description="Application profile data classes",
     author="Phil Barker",
     author_email="phil@pjjk.net",
