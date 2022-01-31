@@ -9,14 +9,15 @@ def test_ShapeInfo():
 def test_initShapeInfo(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.id == ""
-    assert sh.label == {}
-    assert sh.comment == {}
-    assert sh.targets == {}
-    assert sh.closed == False
-    assert sh.ignoreProps == []
-    assert sh.mandatory == False
-    assert sh.severity == ""
-    assert sh.note == {}
+    assert sh.label == {}         # lang map of "lang": "value" pairs
+    assert sh.comment == {}       # lang map
+    assert sh.targets == {}       # "type" : "target" pairs, type maps to SHACL
+                                  # FIXME: should allow list of targets for each type.
+    assert sh.closed == False     # boolean, True = closed, False = open
+    assert sh.ignoreProps == []   # list of propety ids
+    assert sh.mandatory == False  # boolean, True = mandatory, False = optional
+    assert sh.severity == ""      # string should map to SHACL vals or similar
+    assert sh.note == {}          # lang map
 
 def test_set_id(test_ShapeInfo):
     sh = test_ShapeInfo
