@@ -69,17 +69,19 @@ def test_set_closed(test_ShapeInfo):
         sh.set_closed("Yes it is")
     assert str(e.value) == "Value not recognised as True or False."
 
-def test_append_ignoreProps(test_ShapeInfo):
+def test_add_ignoreProps(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.ignoreProps == []
-    sh.append_ignoreProps("rdf:type")
+    sh.add_ignoreProps("rdf:type")
     assert sh.ignoreProps == ["rdf:type"]
-    sh.append_ignoreProps("sdo:type")
+    sh.add_ignoreProps("sdo:type")
     assert sh.ignoreProps == ["rdf:type", "sdo:type"]
     with pytest.raises(TypeError) as e:
-        sh.append_ignoreProps(["dct:type"])
+        sh.add_ignoreProps(["dct:type"])
     assert str(e.value) == "Property id must be a string."
     assert sh.ignoreProps == ["rdf:type", "sdo:type"]
+    sh.add_ignoreProps("dc:type, dct:type")
+    assert sh.ignoreProps == ["rdf:type", "sdo:type", "dc:type", "dct:type"]
 
 def test_set_mandatory(test_ShapeInfo):
     sh = test_ShapeInfo

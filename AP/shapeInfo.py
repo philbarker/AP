@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field, asdict
+import re
 
 
 @dataclass
@@ -69,9 +70,12 @@ class ShapeInfo:
             msg = "Value not recognised as True or False."
             raise ValueError(msg)
 
-    def append_ignoreProps(self, prop):
-        if type(prop) == str:
-            self.ignoreProps.append(prop)
+    def add_ignoreProps(self, properties):
+        """Set list of properties to ignore from string properties"""
+        splitters = ", |; |,|;| \n| |\n" # ideally read from config
+        if type(properties) == str:
+            value_list = re.split(splitters, properties)
+            self.ignoreProps.extend(value_list)
         else:
             msg = "Property id must be a string."
             raise TypeError(msg)
