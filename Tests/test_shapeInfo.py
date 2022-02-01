@@ -63,9 +63,11 @@ def test_set_closed(test_ShapeInfo):
     assert sh.closed == True
     sh.set_closed(False)
     assert sh.closed == False
-    with pytest.raises(TypeError) as e:
-        sh.set_closed("True")
-    assert str(e.value) == "Value must be a boolean, True or False."
+    sh.set_closed("True")
+    assert sh.closed == True
+    with pytest.raises(ValueError) as e:
+        sh.set_closed("Yes it is")
+    assert str(e.value) == "Value not recognised as True or False."
 
 def test_append_ignoreProps(test_ShapeInfo):
     sh = test_ShapeInfo
@@ -86,9 +88,11 @@ def test_set_mandatory(test_ShapeInfo):
     assert sh.mandatory == True
     sh.set_mandatory(False)
     assert sh.mandatory == False
-    with pytest.raises(TypeError) as e:
-        sh.set_mandatory("True")
-    assert str(e.value) == "Value must be a boolean, True or False."
+    sh.set_mandatory("True")
+    assert sh.mandatory == True
+    with pytest.raises(ValueError) as e:
+        sh.set_mandatory("Nope")
+    assert str(e.value) == "Value not recognised as True or False."
 
 def test_set_severity(test_ShapeInfo):
     sh = test_ShapeInfo

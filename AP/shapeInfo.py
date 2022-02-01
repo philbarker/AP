@@ -58,11 +58,16 @@ class ShapeInfo:
 
     def set_closed(self, isClosed):
         """Set boolean value of closed to value of isClosed"""
-        if type(isClosed) == bool:
-            self.closed = isClosed
+        #To do: option to set these in AP
+        t_vals = ["true", "t", "yes", "y", "1"]
+        f_vals = ["false", "f", "no", "n", "0"]
+        if str(isClosed).lower() in t_vals:
+              self.closed = True
+        elif str(isClosed).lower() in f_vals:
+              self.closed = False
         else :
-            msg = "Value must be a boolean, True or False."
-            raise TypeError(msg)
+            msg = "Value not recognised as True or False."
+            raise ValueError(msg)
 
     def append_ignoreProps(self, prop):
         if type(prop) == str:
@@ -73,11 +78,17 @@ class ShapeInfo:
 
     def set_mandatory(self, isMandatory):
         """Set boolean value of closed to value of isClosed"""
-        if type(isMandatory) == bool:
-            self.mandatory = isMandatory
+        #To do: option to set these in AP
+        t_vals = ["true", "t", "yes", "y", "1"]
+        f_vals = ["false", "f", "no", "n", "0"]
+        if str(isMandatory).lower() in t_vals:
+              self.mandatory = True
+        elif str(isMandatory).lower() in f_vals:
+              self.mandatory = False
         else :
-            msg = "Value must be a boolean, True or False."
-            raise TypeError(msg)
+            msg = "Value not recognised as True or False."
+            raise ValueError(msg)
+
 
     def set_severity(self, severity):
         """Append {target_type: target} to targets dict."""
