@@ -1,5 +1,5 @@
 import pytest
-from AP import ShapeInfo
+from AP import ShapeInfo, read_shapeInfoDict
 
 @pytest.fixture(scope="module")
 def test_ShapeInfo():
@@ -120,3 +120,37 @@ def test_add_note(test_ShapeInfo):
     assert sh.note == {"en": "A Test", "es": "Una Prueba"}
     sh.add_note("en", "A Probe")
     assert sh.note == {"en": "A Probe", "es": "Una Prueba"}
+
+def test_read_shapeInfoDict():
+    fname = "./Tests/TestData/shapes.csv"
+    lang  = "en"
+    shapeDict = read_shapeInfoDict(fname, lang)
+    assert len(shapeDict) == 2
+    expectedShapeDict = {
+        "BookShape": ShapeInfo(
+            id = "BookShape",
+            label = {"en": "Book"},
+            comment = {"en": "Shape for describing books"},
+            targets = {"class": "sdo:Book"},
+            closed = False,
+            ignoreProps = [],
+            mandatory = True,
+            severity = "violation",
+            note = {}
+        ),
+        "AuthorShape": ShapeInfo(
+            id = "AuthorShape",
+            label = {"en": "Author"},
+            comment = {"en": "Shape for describing authors"},
+            targets = {
+                "objectsof": "dct:creator",
+                "class": "sdo:Person"
+            },
+            closed = True,
+            ignoreProps = ["rdf:type"],
+            mandatory = False,
+            severity = "warning",
+            note = {}
+        )
+    }
+    assert shapeDict == expectedShapeDict

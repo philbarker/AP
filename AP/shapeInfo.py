@@ -1,6 +1,41 @@
 from dataclasses import dataclass, field, asdict
+from csv import DictReader
 import re
 
+def read_shapeInfoDict(fname, lang):
+    """Read data from a (csv) file, return a list of ShapeInfo objects."""
+    # TODO could add options for loading from other formats
+    shapeInfoDict = {}
+    with open(fname, "r") as csv_file:
+        csvReader = DictReader(csv_file)
+        for row in csvReader:
+            if row["shapeID"]:
+                id = row["shapeID"]
+                if id in shapeInfoDict.keys():
+                    s = shapeInfoDict[id]
+                else:
+                    s = ShapeInfo()
+                s.set_id(id)
+                if ("label" in row.keys()) and row["label"] :
+                    s.add_label(lang, row["label"])
+                if ("comment" in row.keys()) and row["comment"] :
+                    s.add_comment(lang, row["comment"])
+                if ("target" in row.keys()) and row["target"] and  ("targetType" in row.keys()) and row["targetType"] :
+                    s.append_target(row["target"], row["targetType"])
+                if ("closed" in row.keys()) and row["closed"]:
+                    s.set_closed(row["closed"])
+                if ("ignoreProps" in row.keys()) and row["ignoreProps"]:
+                    s.add_ignoreProps(row["ignoreProps"])
+                if ("mandatory" in row.keys()) and row["mandatory"]:
+                    s.set_mandatory(row["mandatory"])
+                if ("severity" in row.keys()) and row["severity"]:
+                    s.set_severity(row["severity"])
+                if ("note" in row.keys()) and row["note"]:
+                    s.add_note(lang, row["note"])
+                shapeInfoDict[id] = s
+            else:  # skip lines with no shape id
+                continue
+    return shapeInfoDict
 
 @dataclass
 class ShapeInfo:

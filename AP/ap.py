@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field, asdict
 from .propertyStatement import PropertyStatement
+from .shapeInfo import ShapeInfo
 from csv import DictReader
 import pprint, re
 
@@ -11,7 +12,7 @@ class AP:
     propertyStatements: list = field(default_factory=list)
     namespaces: dict = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
-    shapeInfo: dict = field(default_factory=dict)
+    shapeInfo: dict = field(default_factory=dict) # of shapeId ShapeInfo objects
 
     def add_namespace(self, ns, uri):
         """Adds (over-writes) the ns: URI, key value pair to the namespaces dict."""
@@ -37,41 +38,14 @@ class AP:
             raise TypeError(msg)
         return
 
-    def add_shapeInfo(self, sh, info):
-        """Adds (over-writes) the shape info to the shape dict."""
-        if type(sh) != str:
-            msg = "Shape key must be a string."
-            raise TypeError(msg)
-        elif type(info) != dict:
-            msg = "Shape info must be a dictionary."
-            raise TypeError(msg)
+    def add_shapeInfo(self, sh_id, sh_info):
+        """Adds the info to the shape info dict."""
+        if (type(sh_info) is ShapeInfo) and (type(sh_id) is str) :
+            self.shapeInfo[sh_id] = sh_info
         else:
-        # need to normalise some values to booleans
-        # ad hoc solution for now
-        # when reqs for shape info are settled will probably have
-        # a data class for shapeInfo and methods to read values
-        # that will include normalization
-            t_vals = ["true", "t", "yes", "1"]
-            f_vals = ["false", "f", "no", "0"]
-            booleans = ["closed", "mandatory"]
-            for b in booleans:
-                if b in info.keys():
-                    if str(info[b]).lower() in t_vals:
-                        info[b] = True
-                    elif str(info[b]).lower() in f_vals:
-                        info[b] = False
-        # need to normalise some values to lists
-        # ad hoc solution for now, as above
-        splitters = ", |; |,|;| \n| |\n" # ideally read from config
-        lists = ["ignoreProps"]
-        for l in lists:
-            if l in info.keys() and info[l]:
-                valueStr = info[l]
-                value_list = re.split(splitters, valueStr)
-                info[l] = value_list
-        # don't forget to save the shape
-        self.shapeInfo[sh] = info
-        return
+            msg = "Info must be of ShapeInfo type, id must be a string."
+            raise TypeError(msg)
+
 
     def add_propertyStatement(self, ps):
         """Adds PropertyStatement object to the list of property statements."""
