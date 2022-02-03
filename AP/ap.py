@@ -88,7 +88,6 @@ class AP:
         else:
             lang = defaultLang
         shapeInfoDict = read_shapeInfoDict(fname, lang)
-        print(shapeInfoDict)
         for key in shapeInfoDict.keys():
             self.add_shapeInfo(key, shapeInfoDict[key])
 
