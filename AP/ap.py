@@ -12,12 +12,12 @@ class AP:
     propertyStatements: list = field(default_factory=list)
     namespaces: dict = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
-    shapeInfo: dict = field(default_factory=dict) # of shapeId ShapeInfo objects
+    shapeInfo: dict = field(default_factory=dict)  # of shapeId ShapeInfo objects
 
     def add_namespace(self, ns, uri):
         """Adds (over-writes) the ns: URI, key value pair to the namespaces dict."""
         if (type(ns) == str) and (type(uri) == str):
-            if (len(ns) == 0) or  ns == ":":
+            if (len(ns) == 0) or ns == ":":
                 prefix = "default"
             elif (ns[-1]) == ":":
                 prefix = ns[:-1]
@@ -40,12 +40,11 @@ class AP:
 
     def add_shapeInfo(self, sh_id, sh_info):
         """Adds the info to the shape info dict."""
-        if (type(sh_info) is ShapeInfo) and (type(sh_id) is str) :
+        if (type(sh_info) is ShapeInfo) and (type(sh_id) is str):
             self.shapeInfo[sh_id] = sh_info
         else:
             msg = "Info must be of ShapeInfo type, id must be a string."
             raise TypeError(msg)
-
 
     def add_propertyStatement(self, ps):
         """Adds PropertyStatement object to the list of property statements."""

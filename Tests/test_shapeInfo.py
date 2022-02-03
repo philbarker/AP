@@ -1,23 +1,26 @@
 import pytest
 from AP import ShapeInfo, read_shapeInfoDict
 
+
 @pytest.fixture(scope="module")
 def test_ShapeInfo():
     sh = ShapeInfo()
     return sh
 
+
 def test_initShapeInfo(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.id == ""
-    assert sh.label == {}         # lang map of "lang": "value" pairs
-    assert sh.comment == {}       # lang map
-    assert sh.targets == {}       # "type" : "target" pairs, type maps to SHACL
-                                  # FIXME: should allow list of targets for each type.
-    assert sh.closed == False     # boolean, True = closed, False = open
-    assert sh.ignoreProps == []   # list of propety ids
+    assert sh.label == {}  # lang map of "lang": "value" pairs
+    assert sh.comment == {}  # lang map
+    assert sh.targets == {}  # "type" : "target" pairs, type maps to SHACL
+    # FIXME: should allow list of targets for each type.
+    assert sh.closed == False  # boolean, True = closed, False = open
+    assert sh.ignoreProps == []  # list of propety ids
     assert sh.mandatory == False  # boolean, True = mandatory, False = optional
-    assert sh.severity == ""      # string should map to SHACL vals or similar
-    assert sh.note == {}          # lang map
+    assert sh.severity == ""  # string should map to SHACL vals or similar
+    assert sh.note == {}  # lang map
+
 
 def test_set_id(test_ShapeInfo):
     sh = test_ShapeInfo
@@ -28,6 +31,7 @@ def test_set_id(test_ShapeInfo):
         sh.set_id(1)
     assert str(e.value) == "Shape identifier must be a string."
     assert sh.id == "TestShape"
+
 
 def test_add_label(test_ShapeInfo):
     sh = test_ShapeInfo
@@ -43,6 +47,7 @@ def test_add_label(test_ShapeInfo):
     sh.add_label("en", "Probe")
     assert sh.label == {"en": "Probe", "es": "Prueba"}
 
+
 def test_append_target(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.targets == {}
@@ -56,6 +61,7 @@ def test_append_target(test_ShapeInfo):
     sh.append_target("dc:creator", "objectsOf")
     assert sh.targets == {"objectsof": "dc:creator", "class": "dc:Agent"}
 
+
 def test_set_closed(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.closed == False
@@ -68,6 +74,7 @@ def test_set_closed(test_ShapeInfo):
     with pytest.raises(ValueError) as e:
         sh.set_closed("Yes it is")
     assert str(e.value) == "Value not recognised as True or False."
+
 
 def test_add_ignoreProps(test_ShapeInfo):
     sh = test_ShapeInfo
@@ -83,6 +90,7 @@ def test_add_ignoreProps(test_ShapeInfo):
     sh.add_ignoreProps("dc:type, dct:type")
     assert sh.ignoreProps == ["rdf:type", "sdo:type", "dc:type", "dct:type"]
 
+
 def test_set_mandatory(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.mandatory == False
@@ -96,6 +104,7 @@ def test_set_mandatory(test_ShapeInfo):
         sh.set_mandatory("Nope")
     assert str(e.value) == "Value not recognised as True or False."
 
+
 def test_set_severity(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.severity == ""
@@ -106,6 +115,7 @@ def test_set_severity(test_ShapeInfo):
     with pytest.raises(TypeError) as e:
         sh.set_severity(3)
     assert str(e.value) == "Severity must be a string."
+
 
 def test_add_note(test_ShapeInfo):
     sh = test_ShapeInfo
@@ -121,36 +131,34 @@ def test_add_note(test_ShapeInfo):
     sh.add_note("en", "A Probe")
     assert sh.note == {"en": "A Probe", "es": "Una Prueba"}
 
+
 def test_read_shapeInfoDict():
     fname = "./Tests/TestData/shapes.csv"
-    lang  = "en"
+    lang = "en"
     shapeDict = read_shapeInfoDict(fname, lang)
     assert len(shapeDict) == 2
     expectedShapeDict = {
         "BookShape": ShapeInfo(
-            id = "BookShape",
-            label = {"en": "Book"},
-            comment = {"en": "Shape for describing books"},
-            targets = {"class": "sdo:Book"},
-            closed = False,
-            ignoreProps = [],
-            mandatory = True,
-            severity = "violation",
-            note = {}
+            id="BookShape",
+            label={"en": "Book"},
+            comment={"en": "Shape for describing books"},
+            targets={"class": "sdo:Book"},
+            closed=False,
+            ignoreProps=[],
+            mandatory=True,
+            severity="violation",
+            note={},
         ),
         "AuthorShape": ShapeInfo(
-            id = "AuthorShape",
-            label = {"en": "Author"},
-            comment = {"en": "Shape for describing authors"},
-            targets = {
-                "objectsof": "dct:creator",
-                "class": "sdo:Person"
-            },
-            closed = True,
-            ignoreProps = ["rdf:type"],
-            mandatory = False,
-            severity = "warning",
-            note = {}
-        )
+            id="AuthorShape",
+            label={"en": "Author"},
+            comment={"en": "Shape for describing authors"},
+            targets={"objectsof": "dct:creator", "class": "sdo:Person"},
+            closed=True,
+            ignoreProps=["rdf:type"],
+            mandatory=False,
+            severity="warning",
+            note={},
+        ),
     }
     assert shapeDict == expectedShapeDict

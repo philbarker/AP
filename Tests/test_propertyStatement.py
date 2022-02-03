@@ -89,6 +89,7 @@ def test_add_valueNodeType(test_PS):
     assert str(e.value) == "Value node type must be a string."
     assert ps.valueNodeTypes == ["IRI", "BNode"]
 
+
 def test_add_valueDataType(test_PS):
     ps = test_PS
     assert ps.valueDataTypes == []
@@ -101,6 +102,7 @@ def test_add_valueDataType(test_PS):
     assert str(e.value) == "Value data type must be a string."
     assert ps.valueDataTypes == ["xsd:string", "rdf:langString"]
 
+
 def test_add_valueConstraint(test_PS):
     ps = test_PS
     assert ps.valueConstraints == []
@@ -108,11 +110,12 @@ def test_add_valueConstraint(test_PS):
     assert ps.valueConstraints == ["ex:example"]
     ps.add_valueConstraint(r"^http:\/\/example\.org/$")
     assert ps.valueConstraints == ["ex:example", r"^http:\/\/example\.org/$"]
-#    ps.add_valueConstraint("^\\d{3}-\\d{2}-\\d{4}$")
-#    assert "^\\d{3}-\\d{2}-\\d{4}$" in ps.valueConstraints
+    #    ps.add_valueConstraint("^\\d{3}-\\d{2}-\\d{4}$")
+    #    assert "^\\d{3}-\\d{2}-\\d{4}$" in ps.valueConstraints
     with pytest.raises(TypeError) as e:
         ps.add_valueConstraint(["http://example.org/"])
     assert str(e.value) == "Constraint must be a string."
+
 
 def test_add_valueConstraintType(test_PS):
     ps = test_PS
@@ -126,6 +129,7 @@ def test_add_valueConstraintType(test_PS):
     assert str(e.value) == "Constraint type must be a string."
     assert ps.valueConstraintType == "picklist"
 
+
 def test_add_valueShape(test_PS):
     ps = test_PS
     assert ps.valueShapes == []
@@ -137,6 +141,7 @@ def test_add_valueShape(test_PS):
         ps.add_valueShape(["Entity"])
     assert str(e.value) == "Shape must be a string."
     assert ps.valueShapes == ["Person", "Organization"]
+
 
 def test_add_note(test_PS):
     ps = test_PS
@@ -158,6 +163,7 @@ def test_add_note(test_PS):
     assert ps.notes["en"] == "This is the type."
     assert ps.notes["es"] == "Este es el tipo."
 
+
 def test_add_severity(test_PS):
     ps = test_PS
     assert ps.severity == ""
@@ -169,6 +175,7 @@ def test_add_severity(test_PS):
         ps.add_severity(11)
     assert str(e.value) == "Severity value must be a string."
     assert ps.severity == "Violation"
+
 
 def test_result(test_PS):
     # integration test sum of all above

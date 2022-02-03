@@ -85,11 +85,12 @@ def test_add_shapeInfo(test_AP):
     assert ap.shapeInfo["testShape"].label == "test shape"
     assert ap.shapeInfo["testShape"].closed == True
     with pytest.raises(TypeError) as e:
-        ap.add_shapeInfo("testShape","just the label")
+        ap.add_shapeInfo("testShape", "just the label")
     assert str(e.value) == "Info must be of ShapeInfo type, id must be a string."
     assert ap.shapeInfo["testShape"].ignoreProps == ["p1", "p2"]
 
-#def test_load_shapeInfo(test_AP):
+
+# def test_load_shapeInfo(test_AP):
 #    ap = test_AP
 #    ap.load_shapeInfo(shapeInfo_fname)
 #    assert (

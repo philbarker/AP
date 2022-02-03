@@ -2,6 +2,7 @@ from dataclasses import dataclass, field, asdict
 from csv import DictReader
 import re
 
+
 def read_shapeInfoDict(fname, lang):
     """Read data from a (csv) file, return a list of ShapeInfo objects."""
     # TODO could add options for loading from other formats
@@ -16,11 +17,16 @@ def read_shapeInfoDict(fname, lang):
                 else:
                     s = ShapeInfo()
                 s.set_id(id)
-                if ("label" in row.keys()) and row["label"] :
+                if ("label" in row.keys()) and row["label"]:
                     s.add_label(lang, row["label"])
-                if ("comment" in row.keys()) and row["comment"] :
+                if ("comment" in row.keys()) and row["comment"]:
                     s.add_comment(lang, row["comment"])
-                if ("target" in row.keys()) and row["target"] and  ("targetType" in row.keys()) and row["targetType"] :
+                if (
+                    ("target" in row.keys())
+                    and row["target"]
+                    and ("targetType" in row.keys())
+                    and row["targetType"]
+                ):
                     s.append_target(row["target"], row["targetType"])
                 if ("closed" in row.keys()) and row["closed"]:
                     s.set_closed(row["closed"])
@@ -37,9 +43,11 @@ def read_shapeInfoDict(fname, lang):
                 continue
     return shapeInfoDict
 
+
 @dataclass
 class ShapeInfo:
     """Data with information about a shape."""
+
     id: str = ""
     label: dict = field(default_factory=dict)
     comment: dict = field(default_factory=dict)
@@ -79,7 +87,7 @@ class ShapeInfo:
 
     def append_target(self, target, target_type):
         """Append {target_type: target} to targets dict."""
-        #FIXME: need list of targets for each type.
+        # FIXME: need list of targets for each type.
         known_types = ["class", "instance", "objectsof", "subjectsof"]
         if (type(target) == str) and (type(target_type) == str):
             if target_type.lower() in known_types:
@@ -94,20 +102,20 @@ class ShapeInfo:
 
     def set_closed(self, isClosed):
         """Set boolean value of closed to value of isClosed"""
-        #To do: option to set these in AP
+        # To do: option to set these in AP
         t_vals = ["true", "t", "yes", "y", "1"]
         f_vals = ["false", "f", "no", "n", "0"]
         if str(isClosed).lower() in t_vals:
-              self.closed = True
+            self.closed = True
         elif str(isClosed).lower() in f_vals:
-              self.closed = False
-        else :
+            self.closed = False
+        else:
             msg = "Value not recognised as True or False."
             raise ValueError(msg)
 
     def add_ignoreProps(self, properties):
         """Set list of properties to ignore from string properties"""
-        splitters = ", |; |,|;| \n| |\n" # ideally read from config
+        splitters = ", |; |,|;| \n| |\n"  # ideally read from config
         if type(properties) == str:
             value_list = re.split(splitters, properties)
             self.ignoreProps.extend(value_list)
@@ -117,23 +125,22 @@ class ShapeInfo:
 
     def set_mandatory(self, isMandatory):
         """Set boolean value of closed to value of isClosed"""
-        #To do: option to set these in AP
+        # To do: option to set these in AP
         t_vals = ["true", "t", "yes", "y", "1"]
         f_vals = ["false", "f", "no", "n", "0"]
         if str(isMandatory).lower() in t_vals:
-              self.mandatory = True
+            self.mandatory = True
         elif str(isMandatory).lower() in f_vals:
-              self.mandatory = False
-        else :
+            self.mandatory = False
+        else:
             msg = "Value not recognised as True or False."
             raise ValueError(msg)
 
-
     def set_severity(self, severity):
         """Append {target_type: target} to targets dict."""
-        #FIXME: need list of targets for each type.
+        # FIXME: need list of targets for each type.
         known_vals = ["warning", "info", "violation", ""]
-        if (type(severity) == str):
+        if type(severity) == str:
             if severity.lower() in known_vals:
                 self.severity = severity.lower()
             else:
