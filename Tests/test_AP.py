@@ -66,8 +66,12 @@ def test_add_metadata(test_AP):
 def test_load_metadata(test_AP):
     ap = test_AP
     ap.load_metadata(metadata_fname)
-    assert ap.metadata["url"] == "tap.csv"
-    assert ap.metadata["date"] == "2021-03-26"
+    assert ap.metadata["url"] == "https://docs.google.com/spreadsheets/d/1Vr_x1ckpxG0v8oq7FGB2Qea8G3ESPFvUWK89H0wJH9w/edit#gid=424305041"
+    assert ap.metadata["title"] == "Simple book AP"
+    assert ap.metadata["description"] == "Simple DC TAP for books"
+    assert ap.metadata["author"] == "Phil Barker"
+    assert ap.metadata["date"] == "2022-01-14"
+    assert ap.metadata["lang"] == "en"
 
 
 def test_add_shapeInfo(test_AP):
@@ -90,13 +94,21 @@ def test_add_shapeInfo(test_AP):
     assert ap.shapeInfo["testShape"].ignoreProps == ["p1", "p2"]
 
 
-# def test_load_shapeInfo(test_AP):
-#    ap = test_AP
-#    ap.load_shapeInfo(shapeInfo_fname)
-#    assert (
-#        ap.shapeInfo["#CredentialOrganization"]["label"]
-#        == "Credential Organization Shape"
-#    )
-#    assert ap.shapeInfo["#Address"]["target"] == "ceterms:address"
-#    assert ap.shapeInfo["#Address"]["targetType"] == "ObjectsOf"
-#    assert ap.shapeInfo["#AgentSectorTypeAlignment"]["closed"] == True
+def test_load_shapeInfo(test_AP):
+    ap = test_AP
+    ap.load_shapeInfo(shapeInfo_fname)
+    assert len(ap.shapeInfo) == 3
+    assert "testShape" in ap.shapeInfo.keys()
+    assert "BookShape" in ap.shapeInfo.keys()
+    assert "AuthorShape" in ap.shapeInfo.keys()
+    assert ap.shapeInfo["AuthorShape"] == ShapeInfo(
+            id="AuthorShape",
+            label={"en": "Author"},
+            comment={"en": "Shape for describing authors"},
+            targets={"objectsof": "dct:creator", "class": "sdo:Person"},
+            closed=True,
+            ignoreProps=["rdf:type"],
+            mandatory=False,
+            severity="warning",
+            note={},
+        )

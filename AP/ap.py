@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field, asdict
 from .propertyStatement import PropertyStatement
-from .shapeInfo import ShapeInfo
+from .shapeInfo import ShapeInfo,  read_shapeInfoDict
 from csv import DictReader
 import pprint, re
 
+defaultLang = "en"
 
 @dataclass
 class AP:
@@ -12,7 +13,7 @@ class AP:
     propertyStatements: list = field(default_factory=list)
     namespaces: dict = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
-    shapeInfo: dict = field(default_factory=dict)  # of shapeId ShapeInfo objects
+    shapeInfo: dict = field(default_factory=dict)
 
     def add_namespace(self, ns, uri):
         """Adds (over-writes) the ns: URI, key value pair to the namespaces dict."""
@@ -82,18 +83,14 @@ class AP:
         """Load shapeInfo from a (csv) file."""
         # TODO could add options for loading from other formats
         # TODO check shapeID column exists
-        with open(fname, "r") as csv_file:
-            csvReader = DictReader(csv_file)
-            for row in csvReader:
-                if row["shapeID"]:
-                    sh_id = row["shapeID"]
-                    sh_info = {}
-                else:
-                    continue
-                for key in row.keys():
-                    sh_info[key] = row[key]
-                del sh_info["shapeID"]
-                self.add_shapeInfo(sh_id, sh_info)
+        if ("lang" in self.metadata.keys() ) and self.metadata["lang"]:
+            lang = self.metadata["lang"]
+        else:
+            lang = defaultLang
+        shapeInfoDict = read_shapeInfoDict(fname, lang)
+        print(shapeInfoDict)
+        for key in shapeInfoDict.keys():
+            self.add_shapeInfo(key, shapeInfoDict[key])
 
     def dump(self):
         """Print all the AP data."""
