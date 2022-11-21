@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, asdict
-from .propertyStatement import PropertyStatement
+from .statementTemplate import StatementTemplate
 from .shapeInfo import ShapeInfo,  read_shapeInfoDict
 from csv import DictReader
 import pprint, re
@@ -10,7 +10,7 @@ defaultLang = "en"
 class AP:
     """Data to define an Application Profile."""
 
-    propertyStatements: list = field(default_factory=list)
+    statementTemplates: list = field(default_factory=list)
     namespaces: dict = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
     shapeInfo: dict = field(default_factory=dict)
@@ -47,14 +47,14 @@ class AP:
             msg = "Info must be of ShapeInfo type, id must be a string."
             raise TypeError(msg)
 
-    def add_propertyStatement(self, ps):
-        """Adds PropertyStatement object to the list of property statements."""
-        if ps in self.propertyStatements:
+    def add_statementTemplate(self, ps):
+        """Adds StatementTemplate object to the list of property statements."""
+        if ps in self.statementTemplates:
             pass
-        elif type(ps) == PropertyStatement:
-            self.propertyStatements.append(ps)
+        elif type(ps) == StatementTemplate:
+            self.statementTemplates.append(ps)
         else:
-            msg = "Statement must be of PropertyStatement type."
+            msg = "Statement must be of StatementTemplate type."
             raise TypeError(msg)
 
     def load_namespaces(self, fname):
@@ -100,6 +100,6 @@ class AP:
         pp.pprint(self.namespaces)
         print("\n\n=== Shapes ===")
         pp.pprint(self.shapeInfo)
-        print("\n\n=== propertyStatements ===")
-        pp.pprint(self.propertyStatements)
+        print("\n\n=== statementTemplates ===")
+        pp.pprint(self.statementTemplates)
         return

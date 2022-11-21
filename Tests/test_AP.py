@@ -1,5 +1,5 @@
 import pytest
-from AP import AP, PropertyStatement, ShapeInfo
+from AP import AP, StatementTemplate, ShapeInfo
 
 namespace_fname = "Tests/TestData/namespaces.csv"
 metadata_fname = "Tests/TestData/about.csv"
@@ -13,8 +13,8 @@ def test_AP():
 
 
 @pytest.fixture(scope="module")
-def test_PropertyStatement():
-    ps = PropertyStatement()
+def test_StatementTemplate():
+    ps = StatementTemplate()
     return ps
 
 
@@ -23,7 +23,7 @@ def test_init_defaults(test_AP):
     assert test_AP.metadata == {}
     assert test_AP.namespaces == {}
     assert test_AP.shapeInfo == {}
-    assert test_AP.propertyStatements == []
+    assert test_AP.statementTemplates == []
 
 
 def test_add_namespace(test_AP):

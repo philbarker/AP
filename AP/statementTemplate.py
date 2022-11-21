@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, asdict
 
 
 @dataclass
-class PropertyStatement:
+class StatementTemplate:
     """Data to define a Property Statement."""
 
     shapes: list = field(default_factory=list)

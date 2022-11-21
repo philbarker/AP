@@ -1,3 +1,3 @@
 from .ap import AP
-from .propertyStatement import PropertyStatement
+from .statementTemplate import StatementTemplate
 from .shapeInfo import ShapeInfo, read_shapeInfoDict
