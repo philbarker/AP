@@ -6,6 +6,7 @@ import re
 # chars used to separate multiple entries in cells
 target_splitters = ", |; |,|;| \n| |\n"
 
+
 def read_shapeInfoDict(fname, lang):
     """Read data from a (csv) file, return a list of ShapeInfo objects."""
     # TODO could add options for loading from other formats

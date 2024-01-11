@@ -44,7 +44,10 @@ def test_add_label(test_PS):
     assert ps.labels["es"] == "Tipo"
     with pytest.raises(TypeError) as e:
         ps.add_label({"en": "type"})
-    assert str(e.value)[:60] == "StatementTemplate.add_label() missing 1 required positional "
+    assert (
+        str(e.value)[:60]
+        == "StatementTemplate.add_label() missing 1 required positional "
+    )
     with pytest.raises(TypeError) as e:
         ps.add_label("en", 2)
     assert str(e.value) == "Language identifier and label must be strings."
@@ -153,7 +156,10 @@ def test_add_note(test_PS):
     assert ps.notes["es"] == "Este es el tipo."
     with pytest.raises(TypeError) as e:
         ps.add_note({"en": "type"})
-    assert str(e.value)[:60] == "StatementTemplate.add_note() missing 1 required positional a"
+    assert (
+        str(e.value)[:60]
+        == "StatementTemplate.add_note() missing 1 required positional a"
+    )
     with pytest.raises(TypeError) as e:
         ps.add_note("en", 2)
     assert str(e.value) == "Language identifier and note must be strings."
