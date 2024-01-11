@@ -80,7 +80,7 @@ def test_add_shapeInfo(test_AP):
     shapeInfo.id = "testShape"
     shapeInfo.label = "test shape"
     shapeInfo.comment = "just a shape for tests"
-    shapeInfo.target = {"objectsof": "dc:author"}
+    shapeInfo.target = {"objectsof": ["dc:author"]}
     shapeInfo.closed = True
     shapeInfo.mandatory = False
     shapeInfo.severity = "Warning"
@@ -105,7 +105,7 @@ def test_load_shapeInfo(test_AP):
             id="AuthorShape",
             label={"en": "Author"},
             comment={"en": "Shape for describing authors"},
-            targets={"objectsof": "dct:creator", "class": "sdo:Person"},
+            targets={"objectsof": ["dct:creator"], "class": ["sdo:Person"]},
             closed=True,
             ignoreProps=["rdf:type"],
             mandatory=False,

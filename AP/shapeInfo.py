@@ -2,6 +2,9 @@ from dataclasses import dataclass, field, asdict
 from csv import DictReader
 import re
 
+# TODO read these from config
+# chars used to separate multiple entries in cells
+target_splitters = ", |; |,|;| \n| |\n"
 
 def read_shapeInfoDict(fname, lang):
     """Read data from a (csv) file, return a list of ShapeInfo objects."""
@@ -87,11 +90,16 @@ class ShapeInfo:
 
     def append_target(self, target, target_type):
         """Append {target_type: target} to targets dict."""
-        # FIXME: need list of targets for each type.
         known_types = ["class", "instance", "objectsof", "subjectsof"]
         if (type(target) == str) and (type(target_type) == str):
-            if target_type.lower() in known_types:
-                self.targets[target_type.lower()] = target
+            lc_target_type = target_type.lower()
+            if lc_target_type in self.targets.keys():
+                for t in re.split(target_splitters, target):
+                    self.targets[lc_target_type].append(t)
+            elif lc_target_type in known_types:
+                self.targets[lc_target_type] = list()
+                for t in re.split(target_splitters, target):
+                    self.targets[lc_target_type].append(t)
             else:
                 self.targets[target_type] = target
                 msg = "Warning, ", target_type, " is unknown."

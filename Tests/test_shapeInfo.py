@@ -52,14 +52,18 @@ def test_append_target(test_ShapeInfo):
     sh = test_ShapeInfo
     assert sh.targets == {}
     sh.append_target("dc:author", "objectsOf")
-    assert sh.targets == {"objectsof": "dc:author"}
+    assert sh.targets == {"objectsof": ["dc:author"]}
     sh.append_target("dc:Agent", "Class")
-    assert sh.targets == {"objectsof": "dc:author", "class": "dc:Agent"}
+    assert sh.targets == {"objectsof": ["dc:author"], "class": ["dc:Agent"]}
     with pytest.raises(TypeError) as e:
         sh.append_target("instance", 2)
     assert str(e.value) == "Target and type must be strings."
-    sh.append_target("dc:creator", "objectsOf")
-    assert sh.targets == {"objectsof": "dc:creator", "class": "dc:Agent"}
+    sh.append_target("dc:creator", "objectsOf") 
+    # adding second target to objectsof 
+    assert sh.targets == {"objectsof": ["dc:author", "dc:creator"], "class": ["dc:Agent"]}
+    # add two targets in one string
+    sh.append_target("dc:creator, dc:contributor", "subjectsOf") 
+    assert sh.targets == {"objectsof": ["dc:author", "dc:creator"], "class": ["dc:Agent"], "subjectsof": ["dc:creator", "dc:contributor"]}
 
 
 def test_set_closed(test_ShapeInfo):
@@ -142,7 +146,7 @@ def test_read_shapeInfoDict():
             id="BookShape",
             label={"en": "Book"},
             comment={"en": "Shape for describing books"},
-            targets={"class": "sdo:Book"},
+            targets={"class": ["sdo:Book", "ow:Work"]},
             closed=False,
             ignoreProps=[],
             mandatory=True,
@@ -153,7 +157,7 @@ def test_read_shapeInfoDict():
             id="AuthorShape",
             label={"en": "Author"},
             comment={"en": "Shape for describing authors"},
-            targets={"objectsof": "dct:creator", "class": "sdo:Person"},
+            targets={"objectsof":[ "dct:creator"], "class": ["sdo:Person"]},
             closed=True,
             ignoreProps=["rdf:type"],
             mandatory=False,
