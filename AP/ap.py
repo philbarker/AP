@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field, asdict
 from .statementTemplate import StatementTemplate
-from .shapeInfo import ShapeInfo,  read_shapeInfoDict
+from .shapeInfo import ShapeInfo, read_shapeInfoDict
 from csv import DictReader
 import pprint, re
 
 defaultLang = "en"
+
 
 @dataclass
 class AP:
@@ -83,7 +84,7 @@ class AP:
         """Load shapeInfo from a (csv) file."""
         # TODO could add options for loading from other formats
         # TODO check shapeID column exists
-        if ("lang" in self.metadata.keys() ) and self.metadata["lang"]:
+        if ("lang" in self.metadata.keys()) and self.metadata["lang"]:
             lang = self.metadata["lang"]
         else:
             lang = defaultLang

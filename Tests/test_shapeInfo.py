@@ -1,5 +1,6 @@
 import pytest
 from AP import ShapeInfo, read_shapeInfoDict
+from AP.shapeInfo import ShapeInfo
 
 
 @pytest.fixture(scope="module")
@@ -8,7 +9,7 @@ def test_ShapeInfo():
     return sh
 
 
-def test_initShapeInfo(test_ShapeInfo):
+def test_initShapeInfo(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.id == ""
     assert sh.label == {}  # lang map of "lang": "value" pairs
@@ -22,7 +23,7 @@ def test_initShapeInfo(test_ShapeInfo):
     assert sh.note == {}  # lang map
 
 
-def test_set_id(test_ShapeInfo):
+def test_set_id(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.id == ""
     sh.set_id("TestShape")
@@ -33,7 +34,7 @@ def test_set_id(test_ShapeInfo):
     assert sh.id == "TestShape"
 
 
-def test_add_label(test_ShapeInfo):
+def test_add_label(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.label == {}
     sh.add_label("en", "Test")
@@ -48,21 +49,32 @@ def test_add_label(test_ShapeInfo):
     assert sh.label == {"en": "Probe", "es": "Prueba"}
 
 
-def test_append_target(test_ShapeInfo):
+def test_append_target(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.targets == {}
     sh.append_target("dc:author", "objectsOf")
-    assert sh.targets == {"objectsof": "dc:author"}
+    assert sh.targets == {"objectsof": ["dc:author"]}
     sh.append_target("dc:Agent", "Class")
-    assert sh.targets == {"objectsof": "dc:author", "class": "dc:Agent"}
+    assert sh.targets == {"objectsof": ["dc:author"], "class": ["dc:Agent"]}
     with pytest.raises(TypeError) as e:
         sh.append_target("instance", 2)
     assert str(e.value) == "Target and type must be strings."
     sh.append_target("dc:creator", "objectsOf")
-    assert sh.targets == {"objectsof": "dc:creator", "class": "dc:Agent"}
+    # adding second target to objectsof
+    assert sh.targets == {
+        "objectsof": ["dc:author", "dc:creator"],
+        "class": ["dc:Agent"],
+    }
+    # add two targets in one string
+    sh.append_target("dc:creator, dc:contributor", "subjectsOf")
+    assert sh.targets == {
+        "objectsof": ["dc:author", "dc:creator"],
+        "class": ["dc:Agent"],
+        "subjectsof": ["dc:creator", "dc:contributor"],
+    }
 
 
-def test_set_closed(test_ShapeInfo):
+def test_set_closed(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.closed == False
     sh.set_closed(True)
@@ -76,7 +88,7 @@ def test_set_closed(test_ShapeInfo):
     assert str(e.value) == "Value not recognised as True or False."
 
 
-def test_add_ignoreProps(test_ShapeInfo):
+def test_add_ignoreProps(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.ignoreProps == []
     sh.add_ignoreProps("rdf:type")
@@ -91,7 +103,7 @@ def test_add_ignoreProps(test_ShapeInfo):
     assert sh.ignoreProps == ["rdf:type", "sdo:type", "dc:type", "dct:type"]
 
 
-def test_set_mandatory(test_ShapeInfo):
+def test_set_mandatory(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.mandatory == False
     sh.set_mandatory(True)
@@ -105,7 +117,7 @@ def test_set_mandatory(test_ShapeInfo):
     assert str(e.value) == "Value not recognised as True or False."
 
 
-def test_set_severity(test_ShapeInfo):
+def test_set_severity(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.severity == ""
     sh.set_severity("Violation")
@@ -117,7 +129,7 @@ def test_set_severity(test_ShapeInfo):
     assert str(e.value) == "Severity must be a string."
 
 
-def test_add_note(test_ShapeInfo):
+def test_add_note(test_ShapeInfo: ShapeInfo):
     sh = test_ShapeInfo
     assert sh.note == {}
     sh.add_note("en", "A Test")
@@ -142,7 +154,7 @@ def test_read_shapeInfoDict():
             id="BookShape",
             label={"en": "Book"},
             comment={"en": "Shape for describing books"},
-            targets={"class": "sdo:Book"},
+            targets={"class": ["sdo:Book", "ow:Work"]},
             closed=False,
             ignoreProps=[],
             mandatory=True,
@@ -153,7 +165,7 @@ def test_read_shapeInfoDict():
             id="AuthorShape",
             label={"en": "Author"},
             comment={"en": "Shape for describing authors"},
-            targets={"objectsof": "dct:creator", "class": "sdo:Person"},
+            targets={"objectsof": ["dct:creator"], "class": ["sdo:Person"]},
             closed=True,
             ignoreProps=["rdf:type"],
             mandatory=False,
