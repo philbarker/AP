@@ -1,1 +1,5 @@
-Provides data classes for metadata application profiles, with methods to populate them. Intended to be used in other programs that do more interesting things.
+DISCONTINUED
+
+Use https://github.com/philbarker/TAP2SHACL/ instead.
+
+The code from this repository was transfered to the src/ap folder of TAP2SHACL.
