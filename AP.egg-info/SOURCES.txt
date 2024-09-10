@@ -1,9 +1,0 @@
-setup.py
-AP/__init__.py
-AP/ap.py
-AP/shapeInfo.py
-AP/statementTemplate.py
-AP.egg-info/PKG-INFO
-AP.egg-info/SOURCES.txt
-AP.egg-info/dependency_links.txt
-AP.egg-info/top_level.txt
